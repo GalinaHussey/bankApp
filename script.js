@@ -17,47 +17,35 @@ const header = document.querySelector(".header");
 ///////////////////////////////////////
 // Modal window
 
+// Function to open modal window
 const openModal = function () {
   modal.classList.remove("hidden");
   overlay.classList.remove("hidden");
 };
 
+// Function to close modal window
 const closeModal = function () {
   modal.classList.add("hidden");
   overlay.classList.add("hidden");
 };
 
+// Add event listeners to open modal buttons
 for (let i = 0; i < btnsOpenModal.length; i++)
   btnsOpenModal[i].addEventListener("click", openModal);
 
+// Add event listeners to close modal elements
 btnCloseModal.addEventListener("click", closeModal);
 overlay.addEventListener("click", closeModal);
 
+// Close modal with Escape key
 document.addEventListener("keydown", function (e) {
   if (e.key === "Escape" && !modal.classList.contains("hidden")) {
     closeModal();
   }
 });
 
-// const header = document.querySelector('.header');
-// const msg = document.createElement('div');
-// msg.classList.add('cookie-message');
-// msg.textContent = 'We use cookies';
-// msg.innerHTML =
-//   'We use cookies<button class="btn btn--close--cookie">Got it!</button>';
-// header.append(msg);
-
-// document
-//   .querySelector('.btn--close--cookie')
-//   .addEventListener('click', function () {
-//     msg.remove();
-//   });
-// msg.style.backgroundColor = '#37383d';
-// msg.style.width = '120%';
-// msg.style.height = Number.parseFloat(getComputedStyle(msg).height) + 30 + 'px';
-
 /////////////////////////////////////
-//learnMore btn scrolling
+// Scroll to Section 1
 btnScrollTo.addEventListener("click", function (e) {
   section1.scrollIntoView({ behavior: "smooth" });
 });
@@ -65,6 +53,7 @@ btnScrollTo.addEventListener("click", function (e) {
 ////////////////////////////
 // Navbar scrolling
 
+// Smooth scroll for navigation links
 document.querySelector(".nav__links").addEventListener("click", function (e) {
   if (e.target.classList.contains("nav__link")) {
     e.preventDefault();
@@ -77,16 +66,16 @@ document.querySelector(".nav__links").addEventListener("click", function (e) {
 // Tabbed component
 tabsContainer.addEventListener("click", function (e) {
   const clicked = e.target.closest(".operations__tab");
-  //Guard clause
+  //Guard clause to avoid errors
   if (!clicked) return;
 
-  // Remove active classes
+  // Remove active classes from tabs and contents
   tabs.forEach((tab) => tab.classList.remove("operations__tab--active"));
   tabsContent.forEach((content) =>
     content.classList.remove("operations__content--active")
   );
 
-  // Add active classes
+  // Activate clicked tab and its corresponding content
   clicked.classList.add("operations__tab--active");
   document
     .querySelector(`.operations__content--${clicked.dataset.tab}`)
@@ -94,8 +83,9 @@ tabsContainer.addEventListener("click", function (e) {
 });
 
 //////////////////////////////
-// NavBar fade animation
+// Navbar fade animation
 
+// Handle navigation links hover animation
 const handleHover = function (e) {
   if (e.target.classList.contains("nav__link")) {
     const clicked = e.target;
@@ -109,20 +99,23 @@ const handleHover = function (e) {
   }
 };
 
+// Add hover animation event listeners
 nav.addEventListener("mouseover", handleHover.bind(0.5));
 nav.addEventListener("mouseout", handleHover.bind(1));
 
 ////////////////////////////////
-// Sticky Navbar throgh Intersection Observer API
+// Sticky Navbar with Intersection Observer API
 
 const navHeight = nav.getBoundingClientRect().height;
 
+// Function to make navbar sticky
 const stickyNav = function (entries) {
   const [entry] = entries;
   if (!entry.isIntersecting) {
     nav.classList.add("sticky");
   } else nav.classList.remove("sticky");
 };
+// Observe header for sticky navbar
 const headerObserver = new IntersectionObserver(stickyNav, {
   root: null,
   threshold: 0,
@@ -131,30 +124,32 @@ const headerObserver = new IntersectionObserver(stickyNav, {
 headerObserver.observe(header);
 
 /////////////////////////
-// Revedal Sections on scrolling
+// Revedal Sections on scroll
 
+// Function to reveal sections
+const allSections = document.querySelectorAll(".section");
 const revealSection = function (entries, observer) {
   const [entry] = entries;
   if (!entry.isIntersecting) return;
   entry.target.classList.remove("section--hidden");
   observer.unobserve(entry.target);
 };
-
+// Observe all sections for reveal effect
 const sectionObserver = new IntersectionObserver(revealSection, {
   root: null,
   threshold: 0.15,
 });
 
-const allSections = document.querySelectorAll(".section");
 allSections.forEach(function (section) {
   sectionObserver.observe(section);
-  // section.classList.add('section--hidden');
+  section.classList.add("section--hidden");
 });
 
 //////////////////////////////////
 // Lazy loading images
 
 const imgTargets = document.querySelectorAll("img[data-src]");
+// Function to load images lazily
 const loadImg = function (entries, observer) {
   const [entry] = entries;
   if (!entry.isIntersecting) return;
@@ -168,7 +163,7 @@ const loadImg = function (entries, observer) {
   });
   observer.unobserve(entry.target);
 };
-
+// Observe images for lazy loading
 const imgObserver = new IntersectionObserver(loadImg, {
   root: null,
   threshold: 0,
@@ -197,7 +192,7 @@ const slider = function () {
       .classList.add("dots__dot--active");
   };
 
-  // Change slides
+  // Function to move to a specific slide
   const goToSlide = function (slide) {
     slides.forEach(
       (s, i) => (s.style.transform = `translateX(${100 * (i - slide)}%)`)
@@ -206,7 +201,7 @@ const slider = function () {
     curSlide = +slide;
   };
 
-  //// Dots
+  // Create navigation dots for the slider
   const dotContainer = document.querySelector(".dots");
   const createDots = function () {
     slides.forEach(function (_, i) {
@@ -217,10 +212,10 @@ const slider = function () {
     });
   };
 
-  /// Initial
+  // Initialize slider
   const init = function () {
     createDots();
-    goToSlide(0); //0%, 100%, 200%, 300%
+    goToSlide(0); //0%, 100%, 200%, 300%.....initial state
   };
   init();
 
@@ -232,7 +227,7 @@ const slider = function () {
     } else {
       curSlide++;
     }
-    goToSlide(curSlide); //-100%, 0%, 100%, 200%
+    goToSlide(curSlide); //-100%, 0%, 100%, 200%......update slide position
   };
 
   //Prev Slide
@@ -242,21 +237,21 @@ const slider = function () {
     } else {
       curSlide--;
     }
-    goToSlide(curSlide); //0%, 100%, 200%, 300%,
+    goToSlide(curSlide); //0%, 100%, 200%, 300%,......update slide position
   };
 
   ////////Event Listeners
-  //Click arrows
+  // Click events for slider arrows
   btnRight.addEventListener("click", nextSlide);
   btnLeft.addEventListener("click", prevSlide);
 
-  //Keydown
+  // Keyboard events for slider navigation
   document.addEventListener("keydown", function (e) {
     e.key === "ArrowLeft" && prevSlide();
     e.key === "ArrowRight" && nextSlide();
   });
 
-  // Click dots
+  // Click events for navigation dots
   dotContainer.addEventListener("click", function (e) {
     if (e.target.classList.contains("dots__dot")) {
       const { slide } = e.target.dataset;
